@@ -1,8 +1,3 @@
-#![macro_use]
-extern crate lazy_static;
-
-use std::collections::HashMap;
-
 pub const ILLEGAL: &'static str = "ILLEGAL";
 pub const EOF: &'static str = "EOF";
 
@@ -27,7 +22,7 @@ pub const RBRACE: &'static str = "}";
 pub const FUNCTION: &'static str = "FUNCTION";
 pub const LET: &'static str = "LET";
 
-type TokenType = String;
+type TokenType = &'static str;
 
 pub struct Token {
     token_type: TokenType,
@@ -35,22 +30,14 @@ pub struct Token {
 }
 
 impl Token {
-    fn new(token_type: TokenType, literal: String) -> Token {
+    pub fn new(token_type: TokenType, literal: String) -> Token {
         Token {
             token_type: token_type,
             literal: literal,
         }
     }
 
-    fn token_type(self) -> String {
-        self.literal
+    pub fn token_type(self) -> TokenType {
+        self.token_type
     }
-}
-
-lazy_static! {
-    static ref KEYWORDS: HashMap<&'static str, TokenType> = {
-        let mut m = HashMap::new();
-        m.insert("fn", "FUNCTION");
-        m.insert("let", "LET");
-    };
 }
