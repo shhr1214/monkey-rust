@@ -1,4 +1,7 @@
-type TokenType = String;
+#![macro_use]
+extern crate lazy_static;
+
+use std::collections::HashMap;
 
 const ILLEGAL: &'static str = "ILLEGAL";
 const EOF: &'static str = "EOF";
@@ -24,7 +27,19 @@ const RBRACE: &'static str = "}";
 const FUNCTION: &'static str = "FUNCTION";
 const LET: &'static str = "LET";
 
+type TokenType = String;
+
 struct Token {
     token_type: TokenType,
     literal: String,
 }
+
+lazy_static! {
+    static ref KEYWORDS: HashMap<&'static str, TokenType> = {
+        let mut m = HashMap::new();
+        m.insert("fn", "FUNCTION");
+        m.insert("let", "LET");
+    };
+}
+
+static keywords = HashMap
