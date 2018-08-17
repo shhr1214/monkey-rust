@@ -1,9 +1,9 @@
 struct Lexer {
     input: String,
     // 入力における現在の位置
-    position: int64,
+    position: i64,
     // これから読み込む位置
-    read_position: int64,
+    read_position: i64,
     // 現在検査中の文字
     ch: char,
 }
