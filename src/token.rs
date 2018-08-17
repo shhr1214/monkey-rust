@@ -41,5 +41,3 @@ lazy_static! {
         m.insert("let", "LET");
     };
 }
-
-static keywords = HashMap
