@@ -24,6 +24,7 @@ pub const LET: &'static str = "LET";
 
 type TokenType = &'static str;
 
+#[derive(Debug)]
 pub struct Token {
     token_type: TokenType,
     literal: String,
@@ -39,5 +40,13 @@ impl Token {
 
     pub fn token_type(self) -> TokenType {
         self.token_type
+    }
+}
+
+pub fn lookup_ident(ident: &str) -> TokenType {
+    match ident {
+        "fn" => FUNCTION,
+        "let" => LET,
+        _ => ILLEGAL,
     }
 }
