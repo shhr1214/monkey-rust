@@ -28,6 +28,11 @@ pub const RBRACE: &'static str = "}";
 // キーワード
 pub const FUNCTION: &'static str = "FUNCTION";
 pub const LET: &'static str = "LET";
+pub const TRUE: &'static str = "TRUE";
+pub const FALSE: &'static str = "FALSE";
+pub const IF: &'static str = "IF";
+pub const ELSE: &'static str = "ELSE";
+pub const RETURN: &'static str = "RETURN";
 
 type TokenType = &'static str;
 
@@ -58,6 +63,11 @@ pub fn lookup_ident(ident: &str) -> TokenType {
     match ident {
         "fn" => FUNCTION,
         "let" => LET,
+        "true" => TRUE,
+        "false" => FALSE,
+        "if" => IF,
+        "else" => ELSE,
+        "return" => RETURN,
         _ => IDENT,
     }
 }
