@@ -8,6 +8,13 @@ pub const INT: &'static str = "INT"; // 1234567890
 // 演算子
 pub const ASSIGN: &'static str = "=";
 pub const PLUS: &'static str = "+";
+pub const MINUS: &'static str = "-";
+pub const BANG: &'static str = "!";
+pub const ASTERISK: &'static str = "*";
+pub const SLASH: &'static str = "/";
+
+pub const LT: &'static str = "<";
+pub const GT: &'static str = ">";
 
 // デリミタ
 pub const COMMA: &'static str = ",";

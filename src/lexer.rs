@@ -43,11 +43,17 @@ impl Lexer {
         let ch = char::from(self.ch);
         let token = match ch {
             '=' => Token::new(token::ASSIGN, ch.to_string()),
+            '+' => Token::new(token::PLUS, ch.to_string()),
+            '-' => Token::new(token::MINUS, ch.to_string()),
+            '!' => Token::new(token::BANG, ch.to_string()),
+            '/' => Token::new(token::SLASH, ch.to_string()),
+            '*' => Token::new(token::ASTERISK, ch.to_string()),
+            '<' => Token::new(token::LT, ch.to_string()),
+            '>' => Token::new(token::GT, ch.to_string()),
             ';' => Token::new(token::SEMICOLON, ch.to_string()),
             '(' => Token::new(token::LPAREN, ch.to_string()),
             ')' => Token::new(token::RPAREN, ch.to_string()),
             ',' => Token::new(token::COMMA, ch.to_string()),
-            '+' => Token::new(token::PLUS, ch.to_string()),
             '{' => Token::new(token::LBRACE, ch.to_string()),
             '}' => Token::new(token::RBRACE, ch.to_string()),
             _ => {
