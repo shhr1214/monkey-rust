@@ -37,15 +37,44 @@ impl Lexer {
         self.read_position += 1;
     }
 
+    fn peek_char(&self) -> char {
+        if self.read_position >= self.input.len() as u64 {
+            char::from(0)
+        } else {
+            self.input
+                .chars()
+                .nth(self.read_position as usize)
+                .unwrap_or(char::from(0))
+        }
+    }
+
     pub fn next_token(&mut self) -> Token {
         self.skip_whitespace();
 
         let ch = char::from(self.ch);
         let token = match ch {
-            '=' => Token::new(token::ASSIGN, ch.to_string()),
+            '=' => {
+                if self.peek_char() == '=' {
+                    let ch_tmp = ch;
+                    self.read_char();
+                    let chars = vec![ch_tmp, char::from(self.ch)];
+                    Token::new(token::EQ, chars.into_iter().collect())
+                } else {
+                    Token::new(token::ASSIGN, ch.to_string())
+                }
+            }
             '+' => Token::new(token::PLUS, ch.to_string()),
             '-' => Token::new(token::MINUS, ch.to_string()),
-            '!' => Token::new(token::BANG, ch.to_string()),
+            '!' => {
+                if self.peek_char() == '=' {
+                    let ch_tmp = ch;
+                    self.read_char();
+                    let chars = vec![ch_tmp, char::from(self.ch)];
+                    Token::new(token::NOT_EQ, chars.into_iter().collect())
+                } else {
+                    Token::new(token::BANG, ch.to_string())
+                }
+            }
             '/' => Token::new(token::SLASH, ch.to_string()),
             '*' => Token::new(token::ASTERISK, ch.to_string()),
             '<' => Token::new(token::LT, ch.to_string()),

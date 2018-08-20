@@ -16,6 +16,9 @@ pub const SLASH: &'static str = "/";
 pub const LT: &'static str = "<";
 pub const GT: &'static str = ">";
 
+pub const EQ: &'static str = "==";
+pub const NOT_EQ: &'static str = "!=";
+
 // デリミタ
 pub const COMMA: &'static str = ",";
 pub const SEMICOLON: &'static str = ";";
