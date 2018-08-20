@@ -13,11 +13,12 @@ pub struct Lexer {
 
 impl Lexer {
     fn new(input: String) -> Lexer {
+        let ch = input.chars().nth(0).unwrap_or(char::from(0)) as u8;
         Lexer {
             input: input,
             position: 0,
-            read_position: 0,
-            ch: 0,
+            read_position: 1, // 初期化時点で一文字読んでいる
+            ch: ch,
         }
     }
 
@@ -37,7 +38,6 @@ impl Lexer {
 
     pub fn next_token(&mut self) -> Token {
         let ch = char::from(self.ch);
-        let _eof = char::from(0);
         let token = match ch {
             '=' => Token::new(token::ASSIGN, ch.to_string()),
             ';' => Token::new(token::SEMICOLON, ch.to_string()),
@@ -47,7 +47,7 @@ impl Lexer {
             '+' => Token::new(token::PLUS, ch.to_string()),
             '{' => Token::new(token::LBRACE, ch.to_string()),
             '}' => Token::new(token::RBRACE, ch.to_string()),
-            _eof => Token::new(token::EOF, "".to_string()),
+            ' ' => Token::new(token::EOF, "".to_string()),
             _ => {
                 if is_letter(ch) {
                     let literal = self.read_identifier();
@@ -155,11 +155,13 @@ let result = add(five, ten);
             (token::EOF, ""),
         ];
 
-        let mut l = Lexer::new(input.to_string());
+        let mut lexer = Lexer::new(input.to_string());
         for test in tests.iter() {
-            let token = l.next_token();
-            println!("{:?}", token);
-            // assert_eq!(token.token_type(), test.0)
+            let token = lexer.next_token();
+            let t = token.token_type().to_string();
+            let l = token.literal();
+            assert_eq!(t, test.0, "test token type: token {:?}", token);
+            assert_eq!(l, test.1, "test literal: token {:?}", token);
         }
     }
 }

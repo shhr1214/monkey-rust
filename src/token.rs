@@ -38,8 +38,12 @@ impl Token {
         }
     }
 
-    pub fn token_type(self) -> TokenType {
+    pub fn token_type(&self) -> TokenType {
         self.token_type
+    }
+
+    pub fn literal(&self) -> String {
+        self.literal.clone()
     }
 }
 
@@ -47,6 +51,6 @@ pub fn lookup_ident(ident: &str) -> TokenType {
     match ident {
         "fn" => FUNCTION,
         "let" => LET,
-        _ => ILLEGAL,
+        _ => IDENT,
     }
 }
