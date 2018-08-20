@@ -1,6 +1,7 @@
 use token;
 use token::Token;
 
+#[derive(Debug)]
 pub struct Lexer {
     input: String,
     // 入力における現在の位置
@@ -37,6 +38,8 @@ impl Lexer {
     }
 
     pub fn next_token(&mut self) -> Token {
+        self.skip_whitespace();
+
         let ch = char::from(self.ch);
         let token = match ch {
             '=' => Token::new(token::ASSIGN, ch.to_string()),
@@ -47,22 +50,33 @@ impl Lexer {
             '+' => Token::new(token::PLUS, ch.to_string()),
             '{' => Token::new(token::LBRACE, ch.to_string()),
             '}' => Token::new(token::RBRACE, ch.to_string()),
-            ' ' => Token::new(token::EOF, "".to_string()),
             _ => {
+                if is_null(ch) {
+                    return Token::new(token::EOF, "".to_string());
+                }
                 if is_letter(ch) {
                     let literal = self.read_identifier();
-                    Token::new(token::lookup_ident(literal.as_str()), literal.to_string())
+                    return Token::new(token::lookup_ident(literal.as_str()), literal.to_string());
                 } else if is_digit(ch) {
                     let literal = self.read_number();
-                    Token::new(token::INT, literal.to_string())
+                    return Token::new(token::INT, literal.to_string());
                 } else {
-                    Token::new(token::ILLEGAL, ch.to_string())
+                    return Token::new(token::ILLEGAL, ch.to_string());
                 }
             }
         };
 
         self.read_char();
         token
+    }
+
+    fn skip_whitespace(&mut self) {
+        loop {
+            match char::from(self.ch) {
+                ' ' | '\t' | '\n' | '\r' => self.read_char(),
+                _ => return,
+            }
+        }
     }
 
     fn read_identifier(&mut self) -> String {
@@ -88,6 +102,10 @@ impl Lexer {
             .take((self.position - pos) as usize)
             .collect()
     }
+}
+
+fn is_null(ch: char) -> bool {
+    ch == char::from(0)
 }
 
 fn is_letter(ch: char) -> bool {
@@ -156,12 +174,16 @@ let result = add(five, ten);
         ];
 
         let mut lexer = Lexer::new(input.to_string());
-        for test in tests.iter() {
+        for (i, test) in tests.iter().enumerate() {
             let token = lexer.next_token();
             let t = token.token_type().to_string();
             let l = token.literal();
-            assert_eq!(t, test.0, "test token type: token {:?}", token);
-            assert_eq!(l, test.1, "test literal: token {:?}", token);
+            assert_eq!(
+                t, test.0,
+                "token type test: No. {} {:?} {:?}",
+                i, lexer, token
+            );
+            assert_eq!(l, test.1, "literal test: No. {} {:?} {:?}", i, lexer, token);
         }
     }
 }
