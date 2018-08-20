@@ -13,7 +13,7 @@ pub struct Lexer {
 }
 
 impl Lexer {
-    fn new(input: String) -> Lexer {
+    pub fn new(input: String) -> Lexer {
         let ch = input.chars().nth(0).unwrap_or(char::from(0)) as u8;
         Lexer {
             input: input,
