@@ -13,14 +13,16 @@ trait Expression: Node {
     fn expression_node(&self);
 }
 
-struct Program {
+pub struct Program {
     statements: Vec<Box<Statement>>,
 }
 
-struct LetStatement {
-    token: Token,
-    name: Identifier,
-    value: Expression,
+impl Program {
+    pub fn new() -> Program {
+        Program {
+            statements: Vec::new(),
+        }
+    }
 }
 
 impl Node for Program {
@@ -31,6 +33,12 @@ impl Node for Program {
             "".to_string()
         }
     }
+}
+
+struct LetStatement {
+    token: Token,
+    name: Identifier,
+    value: Expression,
 }
 
 struct Identifier {
