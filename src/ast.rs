@@ -1,3 +1,6 @@
+use token;
+use token::Token;
+
 trait Node {
     fn token_literal(&self) -> String;
 }
@@ -7,11 +10,17 @@ trait Statement: Node {
 }
 
 trait Expression: Node {
-    fn expression_node();
+    fn expression_node(&self);
 }
 
 struct Program {
     statements: Vec<Box<Statement>>,
+}
+
+struct LetStatement {
+    token: Token,
+    name: Identifier,
+    value: Expression,
 }
 
 impl Node for Program {
@@ -22,4 +31,18 @@ impl Node for Program {
             "".to_string()
         }
     }
+}
+
+struct Identifier {
+    token: Token,
+    value: String,
+}
+
+impl Node for Identifier {
+    fn token_literal(&self) -> String {
+        self.token.literal()
+    }
+}
+impl Expression for Identifier {
+    fn expression_node(&self) {}
 }
