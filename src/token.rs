@@ -60,6 +60,13 @@ impl Token {
     pub fn literal(&self) -> String {
         self.literal.clone()
     }
+
+    pub fn display(&self) -> String {
+        format!(
+            "{{ token_type: {}, literal: {} }}",
+            self.token_type, self.literal
+        )
+    }
 }
 
 pub fn lookup_ident(ident: &str) -> TokenType {
