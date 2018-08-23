@@ -1,15 +1,15 @@
 use token;
 use token::Token;
 
-trait Node {
+pub trait Node {
     fn token_literal(&self) -> String;
 }
 
-trait Statement: Node {
+pub trait Statement: Node {
     fn statement_node(&self);
 }
 
-trait Expression: Node {
+pub trait Expression: Node {
     fn expression_node(&self);
 }
 
@@ -22,6 +22,10 @@ impl Program {
         Program {
             statements: Vec::new(),
         }
+    }
+
+    pub fn statements(&self) -> Vec<Box<Statement>> {
+        self.statements
     }
 }
 
