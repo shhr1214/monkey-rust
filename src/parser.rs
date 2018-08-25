@@ -1,4 +1,4 @@
-use ast::Program;
+use ast::{LetStatement, Program, Statement};
 use lexer::Lexer;
 use token::Token;
 
@@ -44,17 +44,26 @@ let foobar = 838383;
         let parser = Parser::new(lexer);
 
         let program = parser.parse_program();
-        assert_eq!(
-            program.statements().len(),
-            3,
-            "num of program statements must be 3"
-        );
+        let statements = program.statements();
+        assert_eq!(statements.len(), 3, "num of program statements must be 3");
 
         let tests = vec!["x", "y", "foobar"];
-
-        let statements = program.statements();
         for (i, t) in tests.iter().enumerate() {
             let stmt = &statements[i];
+            assert!(test_let_statement(stmt, t.to_string()))
+        }
+    }
+
+    fn test_let_statement(stmt: Box<Statement>, _name: String) -> bool {
+        use std::any::Any;
+        let tl = stmt.token_literal();
+        if tl != "let".to_string() {
+            return false;
+        }
+        let mut a: Box<Any> = Box::new(&stmt);
+        match a.downcast::<LetStatement>() {
+            Ok(stmt) => return true,
+            Err(_) => return false,
         }
     }
 }

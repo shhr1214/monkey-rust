@@ -24,7 +24,7 @@ impl Program {
         }
     }
 
-    pub fn statements(&self) -> Vec<Box<Statement>> {
+    pub fn statements(self) -> Vec<Box<Statement>> {
         self.statements
     }
 }
@@ -39,10 +39,10 @@ impl Node for Program {
     }
 }
 
-struct LetStatement {
+pub struct LetStatement {
     token: Token,
     name: Identifier,
-    value: Expression,
+    value: Box<Expression>,
 }
 
 struct Identifier {
