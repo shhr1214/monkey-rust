@@ -1,5 +1,6 @@
-use ast::{LetStatement, Program, Statement};
+use ast::{Node, Program, Statement};
 use lexer::Lexer;
+use token;
 use token::Token;
 
 struct Parser {
@@ -54,16 +55,23 @@ let foobar = 838383;
         }
     }
 
-    fn test_let_statement(stmt: Box<Statement>, _name: String) -> bool {
-        use std::any::Any;
+    fn test_let_statement(stmt: &Statement, name: String) -> bool {
         let tl = stmt.token_literal();
-        if tl != "let".to_string() {
+        if tl != token::LET.to_string() {
             return false;
         }
-        let mut a: Box<Any> = Box::new(&stmt);
-        match a.downcast::<LetStatement>() {
-            Ok(stmt) => return true,
-            Err(_) => return false,
+
+        match stmt {
+            Statement::LetStatement(i, e) => {
+                if i.0 != name {
+                    return false;
+                }
+                if i.token_literal() != name {
+                    return false;
+                }
+                true
+            }
+            _ => false,
         }
     }
 }

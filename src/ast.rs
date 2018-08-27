@@ -7,10 +7,19 @@ pub trait Node {
 
 pub enum Statement {
     LetStatement(Identifier, Expression),
-    ExpressionStatemen(Expr),
+    ExpressionStatement(Expression),
 }
 
-struct Expression {}
+impl Node for Statement {
+    fn token_literal(&self) -> String {
+        match self {
+            Statement::LetStatement(_, _) => token::LET.to_string(),
+            _ => "".to_string(),
+        }
+    }
+}
+
+pub struct Expression {}
 
 pub struct Program {
     statements: Vec<Statement>,
@@ -33,6 +42,7 @@ impl Node for Program {
         if self.statements.len() > 0 {
             match self.statements[0] {
                 Statement::LetStatement(_, _) => token::LET.to_string(),
+                _ => "".to_string(),
             }
         } else {
             "".to_string()
@@ -40,15 +50,10 @@ impl Node for Program {
     }
 }
 
-pub struct Identifier(String);
-
-struct Identifier {
-    token: Token,
-    value: String,
-}
+pub struct Identifier(pub String);
 
 impl Node for Identifier {
     fn token_literal(&self) -> String {
-        self.token.literal()
+        self.0.clone()
     }
 }
