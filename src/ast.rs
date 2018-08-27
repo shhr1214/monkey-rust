@@ -5,16 +5,15 @@ pub trait Node {
     fn token_literal(&self) -> String;
 }
 
-pub trait Statement: Node {
-    fn statement_node(&self);
+pub enum Statement {
+    LetStatement(Identifier, Expression),
+    ExpressionStatemen(Expr),
 }
 
-pub trait Expression: Node {
-    fn expression_node(&self);
-}
+struct Expression {}
 
 pub struct Program {
-    statements: Vec<Box<Statement>>,
+    statements: Vec<Statement>,
 }
 
 impl Program {
@@ -24,7 +23,7 @@ impl Program {
         }
     }
 
-    pub fn statements(self) -> Vec<Box<Statement>> {
+    pub fn statements(self) -> Vec<Statement> {
         self.statements
     }
 }
@@ -32,18 +31,16 @@ impl Program {
 impl Node for Program {
     fn token_literal(&self) -> String {
         if self.statements.len() > 0 {
-            self.statements[0].token_literal()
+            match self.statements[0] {
+                Statement::LetStatement(_, _) => token::LET.to_string(),
+            }
         } else {
             "".to_string()
         }
     }
 }
 
-pub struct LetStatement {
-    token: Token,
-    name: Identifier,
-    value: Box<Expression>,
-}
+pub struct Identifier(String);
 
 struct Identifier {
     token: Token,
@@ -54,7 +51,4 @@ impl Node for Identifier {
     fn token_literal(&self) -> String {
         self.token.literal()
     }
-}
-impl Expression for Identifier {
-    fn expression_node(&self) {}
 }
